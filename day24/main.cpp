@@ -107,7 +107,7 @@ array<array<int,2>,6> neighbours(const array<int,2> & ij) {
     return nbrs;
 }
 
-bool btow(set<array<int,2>> blacks, const array<int,2> & ij0) {
+bool still_black(set<array<int,2>> blacks, const array<int,2> & ij0) {
     size_t count = 0;
     for(auto ij : neighbours(ij0)) {
         if(blacks.contains(ij)) count++;
@@ -116,7 +116,7 @@ bool btow(set<array<int,2>> blacks, const array<int,2> & ij0) {
     return count == 0 || count > 2;
 }
 
-bool wtob(set<array<int,2>> blacks, const array<int,2> & known_black_ij, const array<int,2> & ij0) {
+bool becomes_black(set<array<int,2>> blacks, const array<int,2> & known_black_ij, const array<int,2> & ij0) {
     size_t count = 1;
     for(auto ij : neighbours(ij0)) {
         if(ij != known_black_ij) {
@@ -130,12 +130,12 @@ bool wtob(set<array<int,2>> blacks, const array<int,2> & known_black_ij, const a
 auto process(set<array<int,2>> blacks) {
     set<array<int,2>> new_blacks;
     for(auto ij : blacks) {
-        if(!btow(blacks,ij)) {
+        if(still_black(blacks,ij)) {
             new_blacks.insert(ij);
         }
         for(auto ij_prime : neighbours(ij)) {
             if(!blacks.contains(ij_prime)) {
-                if(wtob(blacks,ij,ij_prime)) {
+                if(becomes_black(blacks,ij,ij_prime)) {
                     new_blacks.insert(ij_prime);
                 }
             }
