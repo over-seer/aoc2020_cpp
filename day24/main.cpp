@@ -4,6 +4,7 @@
 #include <vector>
 #include <array>
 #include <set>
+#include <set>
 
 using namespace std;
 
@@ -87,11 +88,8 @@ set<array<int,2>> part1(string fn) {
             i += di;
             j += dj;
         }
-        auto it = blacks.find(ij);
-        if(it != blacks.end()) blacks.erase(it);
-        else blacks.insert(it,ij);
-        //if(blacks.contains(ij)) blacks.erase(ij);
-        //else blacks.insert(ij);
+        if(blacks.contains(ij)) blacks.erase(ij);
+        else blacks.insert(ij);
     }
     cout << "aoc 2020 day 24 part 1 file " << fn << " ans = " << blacks.size() << endl;
     return blacks;
@@ -107,16 +105,16 @@ array<array<int,2>,6> neighbours(const array<int,2> & ij) {
     return nbrs;
 }
 
-bool still_black(set<array<int,2>> blacks, const array<int,2> & ij0) {
+bool still_black(const set<array<int,2>> & blacks, const array<int,2> & ij0) {
     size_t count = 0;
     for(auto ij : neighbours(ij0)) {
         if(blacks.contains(ij)) count++;
         if(count > 2) break;
     }
-    return count == 0 || count > 2;
+    return !(count == 0 || count > 2);
 }
 
-bool becomes_black(set<array<int,2>> blacks, const array<int,2> & known_black_ij, const array<int,2> & ij0) {
+bool becomes_black(const set<array<int,2>> & blacks, const array<int,2> & known_black_ij, const array<int,2> & ij0) {
     size_t count = 1;
     for(auto ij : neighbours(ij0)) {
         if(ij != known_black_ij) {
